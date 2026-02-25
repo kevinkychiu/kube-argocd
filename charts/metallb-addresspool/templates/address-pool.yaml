@@ -1,4 +1,4 @@
-{{- $secret := lookup "v1" "Secret" "argocd" "metallb-address-pools" -}}
+{{- $secret := lookup "v1" "Secret" "metallb-system" "metallb-address-pools" -}}
 {{- if not $secret -}}
 {{- fail "Secret metallb-address-pools not found in namespace argocd" -}}
 {{- end -}}
