@@ -1,5 +1,4 @@
-{{- $secret := lookup "v1" "Secret" "argocd" "metallb-address-pools" -}}
-{{- if $secret }}
+
 
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
@@ -8,18 +7,5 @@ metadata:
   namespace: metallb-system
 spec:
   addresses:
-    - {{ $secret.data "primary-address-pool" | b64dec }}
+    - "10.10.170.10/32"
 
----
-
-apiVersion: metallb.io/v1beta1
-kind: IPAddressPool
-metadata:
-  name: secondary-pool-argocd
-  namespace: metallb-system
-spec:
-  addresses:
-    - {{ $secret.data "secondary-address-pool" | b64dec }}
-
-
-{{- end }}

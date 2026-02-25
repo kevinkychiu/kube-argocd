@@ -9,7 +9,7 @@ spec:
   project: network
   info:
     - name: Helm Chart URL
-      value: https://github.com/kevinkychiu/kube-argocd/helm/metallb-address-pool
+      value: https://github.com/kevinkychiu/kube-argocd/charts/metallb-address-pool
   destination:
     server: https://kubernetes.default.svc
     namespace: metallb-system
@@ -17,7 +17,8 @@ spec:
     automated:
       enabled: true
       prune: true
+      selfHeal: true
   source:
     path: charts/metallb-addresspool
     repoURL: https://github.com/kevinkychiu/kube-argocd.git
-    # targetRevision: HEAD
+    targetRevision: HEAD
