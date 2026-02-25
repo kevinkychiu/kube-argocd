@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: csi-secret-store-driver
+  namespace: argocd
+spec:
+  project: storage
+  info:
+    - name: Helm Chart URL
+      value: https://artifacthub.io/packages/helm/secret-store-csi-driver/secrets-store-csi-driver
+    - name: Helm Chart values.yaml
+      value: https://github.com/kubernetes-sigs/secrets-store-csi-driver/blob/main/charts/secrets-store-csi-driver/values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      enabled: true
+    syncOptions:
+      - CreateNamespace=true
+  source:
+    chart: https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts
+    repoURL: secrets-store-csi-driver
+    targetRevision: 1.5.5
+    helm:
+      values: |
+        enableSecretRotation: true
+        syncSecret:
+          enabled: true
