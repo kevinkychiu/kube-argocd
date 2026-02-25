@@ -1,0 +1,11 @@
+{{- $secret := lookup "v1" "Secret" "kube-system" "metalb-address-pools" -}}
+{{- if $secret }}
+
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: primary-pool
+  namespace: metallb-system
+spec:
+  addresses:
+    - {{ $secret.data.primary-address-pool | b64dec }}

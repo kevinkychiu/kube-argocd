@@ -1,0 +1,3 @@
+apiVersion: v2
+name: metallb-addresspool
+version: 0.1.0
