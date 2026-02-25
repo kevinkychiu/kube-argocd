@@ -20,4 +20,4 @@ spec:
   source:
     path: charts/metallb-addresspool
     repoURL: https://github.com/kevinkychiu/kube-argocd.git
-    targetRevision: 0.1.0
+    targetRevision: HEAD
