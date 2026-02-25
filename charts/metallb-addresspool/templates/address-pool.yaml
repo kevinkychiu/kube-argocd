@@ -7,5 +7,5 @@ metadata:
   namespace: metallb-system
 spec:
   addresses:
-    - "10.10.170.10/32"
+    - 101.10.170.103/32
 
