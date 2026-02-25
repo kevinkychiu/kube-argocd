@@ -19,5 +19,5 @@ spec:
       prune: true
   source:
     chart: metallb-address-pool
-    repoURL: https://github.com/kevinkychiu/kube-argocd.git
+    repoURL: https://github.com/kevinkychiu/kube-argocd.git/charts
     targetRevision: 0.1.0
