@@ -10,4 +10,16 @@ spec:
   addresses:
     - {{ $secret.data "primary-address-pool" | b64dec }}
 
+---
+
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: secondary-pool-argocd
+  namespace: metallb-system
+spec:
+  addresses:
+    - {{ $secret.data "secondary-address-pool" | b64dec }}
+
+
 {{- end }}
