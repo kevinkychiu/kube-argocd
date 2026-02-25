@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: metallb-system
+  namespace: argocd
+spec:
+  project: network
+  info:
+    - name: Helm Chart URL
+      value: https://artifacthub.io/packages/helm/metallb/metallb
+    - name: Helm Chart values.yaml
+      value: https://github.com/metallb/metallb/blob/main/charts/metallb/values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: metallb-system
+  syncPolicy:
+    automated:
+      enabled: true
+    syncOptions:
+      - CreateNamespace=true
+  source:
+    chart: metallb
+    repoURL: https://metallb.github.io/metallb
+    targetRevision: 0.15.3
