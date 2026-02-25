@@ -7,3 +7,11 @@ spec:
   description: Storage related deployment
   sourceRepos:
   - https://github.com/kevinkychiu/kube-argocd.git
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  destinations:
+  - namespace: '*'
+    server: '*'
+  sourceRepos:
+  - '*'
