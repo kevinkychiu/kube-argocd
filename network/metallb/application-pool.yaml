@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: metallb-system-address-pool
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-895"
+spec:
+  project: network
+  info:
+    - name: Helm Chart URL
+      value: https://github.com/kevinkychiu/kube-argocd/helm/metallb-address-pool
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: metallb-system
+  syncPolicy:
+    automated:
+      enabled: true
+  source:
+    chart: metallb-address-pool
+    repoURL: https://github.com/kevinkychiu/kube-argocd/helm/metallb-address-pool
+    targetRevision: 0.1.0
