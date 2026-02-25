@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: metallb-system
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-900"
 spec:
   project: network
   info:
