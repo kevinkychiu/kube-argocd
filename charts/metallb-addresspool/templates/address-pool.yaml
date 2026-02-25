@@ -1,6 +1,6 @@
 {{- $secret := lookup "v1" "Secret" "metallb-system" "metallb-address-pools" -}}
 {{- if not $secret -}}
-{{- fail "Secret metallb-address-pools not found in namespace argocd" -}}
+{{- fail "Secret metallb-address-pools not found in namespace metallb-system" -}}
 {{- end -}}
 
 apiVersion: metallb.io/v1beta1
