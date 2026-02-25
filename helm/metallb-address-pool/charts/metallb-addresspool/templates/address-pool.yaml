@@ -1,4 +1,4 @@
-{{- $secret := lookup "v1" "Secret" "kube-system" "metallb-address-pools" -}}
+{{- $secret := lookup "v1" "Secret" "metallb-system" "metallb-address-pools" -}}
 {{- if $secret }}
 
 apiVersion: metallb.io/v1beta1
