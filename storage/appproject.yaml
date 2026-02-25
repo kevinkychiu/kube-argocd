@@ -1,0 +1,9 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: storage
+  namespace: argocd
+spec:
+  description: Storage related deployment
+  sourceRepos:
+  - https://github.com/kevinkychiu/kube-argocd.git
