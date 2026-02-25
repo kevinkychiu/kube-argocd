@@ -16,6 +16,7 @@ spec:
   syncPolicy:
     automated:
       enabled: true
+      prune: true
   source:
     chart: metallb-address-pool
     repoURL: https://github.com/kevinkychiu/kube-argocd/helm/metallb-address-pool
