@@ -8,4 +8,6 @@ metadata:
   namespace: metallb-system
 spec:
   addresses:
-    - {{ $secret.data.primary-address-pool | b64dec }}
+    - {{ $secret.data "primary-address-pool" | b64dec }}
+
+{{- end }}
