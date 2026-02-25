@@ -1,12 +1,13 @@
-
+{{- $secret := lookup "v1" "Secret" "metallb-system" "metallb-address-pools" -}}
+{{- if not $secret -}}
+{{- fail "Secret metallb-address-pools not found in namespace metallb-system" -}}
+{{- end -}}
 
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
   name: primary-pool-argocd
   namespace: metallb-system
-  annotations:
-    argocd.argoproj.io/sync-wave=-899
 spec:
   addresses:
     - 101.10.170.103/32
