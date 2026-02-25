@@ -4,7 +4,7 @@
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
-  name: primary-pool
+  name: primary-pool-argocd
   namespace: metallb-system
 spec:
   addresses:
