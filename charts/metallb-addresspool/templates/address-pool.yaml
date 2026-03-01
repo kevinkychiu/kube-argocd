@@ -1,16 +1,75 @@
-{{- $secret := lookup "v1" "Secret" "metallb-system" "metallb-address-pools" -}}
-{{- if not $secret -}}
-{{- fail "Secret metallb-address-pools not found in namespace metallb-system" -}}
-{{- end -}}
-
-apiVersion: metallb.io/v1beta1
-kind: IPAddressPool
+apiVersion: batch/v1
+kind: Job
 metadata:
-  name: primary-pool-argocd
-  namespace: metallb-system
+  name: kubectl-job-example
+  namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-wave: "-890"
 spec:
-  addresses:
-    - 101.10.170.103/32
-
+  template:
+    spec:
+      serviceAccountName: argocd-application-controller
+      containers:
+      - name: tester
+        # Use an image with kubectl pre-installed, e.g., bitnami/kubectl
+        image: bitnami/kubectl:latest
+        envFrom:
+        - secretRef:
+            name: metallb-address-pools
+        env:
+        - name: PRIMARY_ADDRESS_POOL
+          valueFrom:
+            secretKeyRef:
+              name: metallb-address-pools
+              key: primary-address-pool
+        - name: SECONDARY_ADDRESS_POOL
+          valueFrom:
+            secretKeyRef:
+              name: metallb-address-pools
+              key: secondary-address-pool
+        volumeMounts:
+        - name: metallb-address-pools
+          mountPath: /etc/config
+          readOnly: true
+        command:
+        - "/bin/bash"
+        - "-c"
+        # The actual kubectl command to run
+        - |
+          cat <<EOF > /tmp/test.yaml
+          apiVersion: metallb.io/v1beta1
+          kind: IPAddressPool
+          metadata:
+            name: primary-pool
+            namespace: metallb-system
+          spec:
+            addresses:
+              - "${PRIMARY_ADDRESS_POOL}"
+          ---
+          apiVersion: metallb.io/v1beta1
+          kind: IPAddressPool
+          metadata:
+            name: secondary-pool
+            namespace: metallb-system
+          spec:
+            addresses:
+              - "${SECONDARY_ADDRESS_POOL}"
+          ---
+          apiVersion: metallb.io/v1beta1
+          kind: L2Advertisement
+          metadata:
+            name: l2-advert
+            namespace: metallb-system
+          spec:
+            ipAddressPools:
+              - primary-pool
+              - secondary-pool
+          EOF
+          echo "YAML file created."
+          kubectl apply -f /tmp/test.yaml
+      volumes:
+      - name: metallb-address-pools
+        secret:
+          secretName: metallb-address-pools
+      restartPolicy: Never # Job should terminate after completion
+  backoffLimit: 4 # Optional: specify retry limits
