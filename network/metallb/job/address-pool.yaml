@@ -42,6 +42,8 @@ spec:
           metadata:
             name: primary-pool
             namespace: metallb-system
+            labels:
+              argocd-app: metallb-address-pool-job
           spec:
             addresses:
               - "${PRIMARY_ADDRESS_POOL}"
@@ -51,6 +53,8 @@ spec:
           metadata:
             name: secondary-pool
             namespace: metallb-system
+            labels:
+              argocd-app: metallb-address-pool-job
           spec:
             addresses:
               - "${SECONDARY_ADDRESS_POOL}"
@@ -60,6 +64,8 @@ spec:
           metadata:
             name: l2-advert
             namespace: metallb-system
+            labels:
+              argocd-app: metallb-address-pool-job
           spec:
             ipAddressPools:
               - primary-pool
