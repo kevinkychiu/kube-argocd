@@ -15,6 +15,9 @@ spec:
         - name: cleanup
           image: bitnami/kubectl:latest
           command:
-            - sh
-            - -c
-            - echo "Cleaning up resources..."
+            - "/bin/bash"
+            - "-c"
+            - |
+              kubectl delete L2Advertisement -n metallb-system -l argocd-app=metallb-address-pool-job
+              kubectl delete IPAddressPool -n metallb-system -l argocd-app=metallb-address-pool-job
+              echo "Cleaning up resources..."
