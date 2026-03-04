@@ -44,7 +44,7 @@ spec:
             namespace: metallb-system
             labels:
               app.kubernetes.io/instance: metallb-address-pool-job
-              argocd.argoproj.io/tracking-id: metallb-address-pool-job
+              argocd.argoproj.io/tracking-id: argocd/metallb-address-pool-job
               argocd-app: metallb-address-pool-job
           spec:
             addresses:
@@ -57,7 +57,7 @@ spec:
             namespace: metallb-system
             labels:
               app.kubernetes.io/instance: metallb-address-pool-job
-              argocd.argoproj.io/tracking-id: metallb-address-pool-job
+              argocd.argoproj.io/tracking-id: argocd/metallb-address-pool-job
               argocd-app: metallb-address-pool-job
           spec:
             addresses:
@@ -70,7 +70,7 @@ spec:
             namespace: metallb-system
             labels:
               app.kubernetes.io/instance: metallb-address-pool-job
-              argocd.argoproj.io/tracking-id: metallb-address-pool-job
+              argocd.argoproj.io/tracking-id: argocd/metallb-address-pool-job
               argocd-app: metallb-address-pool-job
           spec:
             ipAddressPools:
