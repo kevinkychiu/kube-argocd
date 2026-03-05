@@ -53,9 +53,8 @@ spec:
           metadata:
             name: secondary-pool
             namespace: metallb-system
-            labels:
-              app.kubernetes.io/instance: "metallb-address-pool-job"
-              argocd-app: metallb-address-pool-job
+            annotations:
+              argocd.argoproj.io/tracking-id: metallb-address-pool-job:apps/IPAddressPool:argocd/address-pool-job
           spec:
             addresses:
               - "${SECONDARY_ADDRESS_POOL}"
@@ -65,9 +64,8 @@ spec:
           metadata:
             name: l2-advert
             namespace: metallb-system
-            labels:
-              app.kubernetes.io/instance: "metallb-address-pool-job"
-              argocd-app: metallb-address-pool-job
+            annotations:
+              argocd.argoproj.io/tracking-id: metallb-address-pool-job:apps/IPAddressPool:argocd/address-pool-job
           spec:
             ipAddressPools:
               - primary-pool
