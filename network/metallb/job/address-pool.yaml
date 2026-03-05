@@ -44,6 +44,10 @@ spec:
             namespace: metallb-system
             annotations:
               argocd.argoproj.io/tracking-id: metallb-address-pool-job:apps/IPAddressPool:argocd/address-pool-job
+            labels:
+              app.kubernetes.io/component: address-pool-job
+              app.kubernetes.io/instance: metallb-system
+              app.kubernetes.io/name: argocd
           spec:
             addresses:
               - "${PRIMARY_ADDRESS_POOL}"
