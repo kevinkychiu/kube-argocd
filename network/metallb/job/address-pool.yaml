@@ -42,7 +42,7 @@ spec:
           metadata:
             name: primary-pool
             namespace: metallb-system
-            labels:
+            annotations:
               argocd.argoproj.io/tracking-id: metallb-address-pool-job:aoos/IPAddressPool:argocd/address-pool-job
           spec:
             addresses:

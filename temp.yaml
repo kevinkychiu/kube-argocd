@@ -1,0 +1,211 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: network
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1000"
+spec:
+  description: Network projects
+  sourceRepos:
+  - https://github.com/kevinkychiu/kube-argocd.git
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  destinations:
+  - namespace: '*'
+    server: '*'
+  sourceRepos:
+  - '*'
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: metallb-system
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-900"
+spec:
+  project: network
+  info:
+    - name: Helm Chart URL
+      value: https://artifacthub.io/packages/helm/metallb/metallb
+    - name: Helm Chart values.yaml
+      value: https://github.com/metallb/metallb/blob/main/charts/metallb/values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: metallb-system
+  syncPolicy:
+    automated:
+      enabled: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
+  source:
+    chart: metallb
+    repoURL: https://metallb.github.io/metallb
+    targetRevision: 0.15.3
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: traefik
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-880"
+spec:
+  project: network
+  info:
+    - name: Helm Chart URL
+      value: https://traefik.github.io/charts
+    - name: Helm Chart values.yaml
+      value: https://github.com/traefik/traefik-helm-chart/blob/master/traefik/values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: traefik
+  syncPolicy:
+    automated:
+      enabled: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
+  source:
+    chart: traefik
+    repoURL: https://traefik.github.io/charts
+    targetRevision: 39.1.0-ea.2
+    helm:
+      values: |
+        additionalArguments:
+          - --api=true
+          - --api.insecure=true
+          - --serversTransport.insecureSkipVerify=true
+        api:
+          dashboard: true
+        gateway:
+          enabled: false
+        ingressRoute:
+          dashboard:
+            enabled: true
+        service:
+          annotations:
+            metallb.universe.tf/address-pool: primary-pool
+          spec:
+            # Preserve the client's source IP address
+            # This is important for logging, rate limiting, and security
+            # externalTrafficPolicy: Local
+        logs:
+          general:
+            level: INFO
+        ports:
+          gitssh:
+            expose:
+              default: true
+            exposedPort: 2222
+            port: 2222
+            protocol: TCP
+          ldap:
+            expose:
+              default: true
+            exposedPort: 389
+            port: 8389
+            protocol: TCP
+          ldaps:
+            expose:
+              default: true
+            exposedPort: 636
+            port: 8636
+            protocol: TCP
+        providers:
+          kubernetesCRD:
+            allowCrossNamespace: true
+            allowEmptyServices: true
+            allowExternalNameServices: true
+            enabled: true
+          kubernetesIngress:
+            enabled: true
+            ingressClass: traefik
+            publishedService:
+              enabled: true
+
+
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kubectl-job-example
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-890"
+spec:
+  template:
+    spec:
+      serviceAccountName: argocd-application-controller
+      containers:
+      - name: tester
+        # Use an image with kubectl pre-installed, e.g., bitnami/kubectl
+        image: bitnami/kubectl:latest
+        envFrom:
+        - secretRef:
+            name: metallb-address-pools
+        env:
+        - name: PRIMARY_ADDRESS_POOL
+          valueFrom:
+            secretKeyRef:
+              name: metallb-address-pools
+              key: primary-address-pool
+        - name: SECONDARY_ADDRESS_POOL
+          valueFrom:
+            secretKeyRef:
+              name: metallb-address-pools
+              key: secondary-address-pool
+        volumeMounts:
+        - name: metallb-address-pools
+          mountPath: /etc/config
+          readOnly: true
+        command:
+        - "/bin/bash"
+        - "-c"
+        # The actual kubectl command to run
+        - |
+          cat <<EOF > /tmp/test.yaml
+          apiVersion: metallb.io/v1beta1
+          kind: IPAddressPool
+          metadata:
+            name: primary-pool
+            namespace: metallb-system
+          spec:
+            addresses:
+              - "${PRIMARY_ADDRESS_POOL}"
+          ---
+          apiVersion: metallb.io/v1beta1
+          kind: IPAddressPool
+          metadata:
+            name: secondary-pool
+            namespace: metallb-system
+          spec:
+            addresses:
+              - "${SECONDARY_ADDRESS_POOL}"
+          ---
+          apiVersion: metallb.io/v1beta1
+          kind: L2Advertisement
+          metadata:
+            name: l2-advert
+            namespace: metallb-system
+          spec:
+            ipAddressPools:
+              - primary-pool
+              - secondary-pool
+          EOF
+          echo "YAML file created."
+          kubectl apply -f /tmp/test.yaml
+      volumes:
+      - name: metallb-address-pools
+        secret:
+          secretName: metallb-address-pools
+      restartPolicy: Never # Job should terminate after completion
+  backoffLimit: 4 # Optional: specify retry limits
