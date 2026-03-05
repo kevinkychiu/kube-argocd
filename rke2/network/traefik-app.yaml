@@ -1,0 +1,80 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: traefik
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-880"
+spec:
+  project: network
+  info:
+    - name: Helm Chart URL
+      value: https://traefik.github.io/charts
+    - name: Helm Chart values.yaml
+      value: https://github.com/traefik/traefik-helm-chart/blob/master/traefik/values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: traefik
+  syncPolicy:
+    automated:
+      enabled: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
+  source:
+    chart: traefik
+    repoURL: https://traefik.github.io/charts
+    targetRevision: 39.1.0-ea.2
+    helm:
+      values: |
+        additionalArguments:
+          - --api=true
+          - --api.insecure=true
+          - --serversTransport.insecureSkipVerify=true
+        api:
+          dashboard: true
+        gateway:
+          enabled: false
+        ingressRoute:
+          dashboard:
+            enabled: true
+        service:
+          annotations:
+            metallb.universe.tf/address-pool: primary-pool
+          spec:
+            # Preserve the client's source IP address
+            # This is important for logging, rate limiting, and security
+            # externalTrafficPolicy: Local
+        logs:
+          general:
+            level: INFO
+        ports:
+          gitssh:
+            expose:
+              default: true
+            exposedPort: 2222
+            port: 2222
+            protocol: TCP
+          ldap:
+            expose:
+              default: true
+            exposedPort: 389
+            port: 8389
+            protocol: TCP
+          ldaps:
+            expose:
+              default: true
+            exposedPort: 636
+            port: 8636
+            protocol: TCP
+        providers:
+          kubernetesCRD:
+            allowCrossNamespace: true
+            allowEmptyServices: true
+            allowExternalNameServices: true
+            enabled: true
+          kubernetesIngress:
+            enabled: true
+            ingressClass: traefik
+            publishedService:
+              enabled: true
