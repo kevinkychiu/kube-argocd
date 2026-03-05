@@ -43,7 +43,7 @@ spec:
             name: primary-pool
             namespace: metallb-system
             labels:
-              app.kubernetes.io/instance: argocd/metallb-address-pool-job
+              app.kubernetes.io/instance: "argocd/metallb-address-pool-job"
               argocd-app: metallb-address-pool-job
           spec:
             addresses:
@@ -55,7 +55,7 @@ spec:
             name: secondary-pool
             namespace: metallb-system
             labels:
-              app.kubernetes.io/instance: argocd/metallb-address-pool-job
+              app.kubernetes.io/instance: "argocd/metallb-address-pool-job"
               argocd-app: metallb-address-pool-job
           spec:
             addresses:
@@ -67,7 +67,7 @@ spec:
             name: l2-advert
             namespace: metallb-system
             labels:
-              app.kubernetes.io/instance: argocd/metallb-address-pool-job
+              app.kubernetes.io/instance: "argocd/metallb-address-pool-job"
               argocd-app: metallb-address-pool-job
           spec:
             ipAddressPools:
