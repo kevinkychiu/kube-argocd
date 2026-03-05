@@ -43,7 +43,7 @@ spec:
             name: primary-pool
             namespace: metallb-system
             annotations:
-              argocd.argoproj.io/tracking-id: metallb-address-pool-job:aoos/IPAddressPool:argocd/address-pool-job
+              argocd.argoproj.io/tracking-id: address-pool-job:apps/IPAddressPool:argocd/address-pool-job
           spec:
             addresses:
               - "${PRIMARY_ADDRESS_POOL}"
