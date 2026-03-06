@@ -3,8 +3,6 @@ kind: Job
 metadata:
   name: address-pool-job
   namespace: argocd
-  annotations:
-    argocd.argoproj.io/sync-wave: "-890"
 spec:
   template:
     spec:
