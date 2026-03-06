@@ -1,10 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: metallb-address-pool-job
+  name: metallb-config
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "-895"
+    argocd.argoproj.io/sync-wave: "5"
 spec:
   project: network
   info:
