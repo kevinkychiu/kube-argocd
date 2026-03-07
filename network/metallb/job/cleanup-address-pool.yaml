@@ -18,6 +18,7 @@ spec:
             - "/bin/bash"
             - "-c"
             - |
+              echo "Application deleted, running cleanup..."
               kubectl delete L2Advertisement -n metallb-system -l argocd-app=metallb-address-pool-job
               kubectl delete IPAddressPool -n metallb-system -l argocd-app=metallb-address-pool-job
               echo "Cleaning up resources..."
