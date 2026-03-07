@@ -42,6 +42,8 @@ spec:
             namespace: metallb-system
             annotations:
               argocd.argoproj.io/tracking-id: metallb-address-pool-job:apps/IPAddressPool:argocd/address-pool-job
+            labels:
+              argocd-app: address-pool-job
           spec:
             addresses:
               - "${PRIMARY_ADDRESS_POOL}"
@@ -53,6 +55,8 @@ spec:
             namespace: metallb-system
             annotations:
               argocd.argoproj.io/tracking-id: metallb-address-pool-job:apps/IPAddressPool:argocd/address-pool-job
+            labels:
+              argocd-app: address-pool-job
           spec:
             addresses:
               - "${SECONDARY_ADDRESS_POOL}"
@@ -64,6 +68,8 @@ spec:
             namespace: metallb-system
             annotations:
               argocd.argoproj.io/tracking-id: metallb-address-pool-job:apps/IPAddressPool:argocd/address-pool-job
+            labels:
+              argocd-app: address-pool-job
           spec:
             ipAddressPools:
               - primary-pool
