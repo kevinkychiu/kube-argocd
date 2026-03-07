@@ -25,6 +25,8 @@ spec:
     - repoURL: https://metallb.github.io/metallb
       chart: metallb
       targetRevision: 0.15.3
+      helm:
+        releaseName: metallb
     - path: network/metallb/job
       repoURL: https://github.com/kevinkychiu/kube-argocd.git
       targetRevision: HEAD
