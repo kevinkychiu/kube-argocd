@@ -3,8 +3,6 @@ kind: AppProject
 metadata:
   name: network
   namespace: argocd
-  annotations:
-    argocd.argoproj.io/sync-wave: "0"
 spec:
   description: Network projects
   sourceRepos:
