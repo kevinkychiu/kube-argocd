@@ -80,6 +80,8 @@ spec:
           EOF
           echo "YAML file created."
           kubectl apply -f /tmp/test.yaml
+          kubectl get IPAddressPool -A
+          kubectl get L2Advertisement -A
       volumes:
       - name: metallb-address-pools
         secret:
