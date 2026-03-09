@@ -10,7 +10,7 @@ spec:
   info:
   destination:
     server: https://kubernetes.default.svc
-    namespace: metallb-system
+    namespace: argocd
   syncPolicy:
     automated:
       enabled: true
