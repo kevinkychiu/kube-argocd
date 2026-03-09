@@ -4,6 +4,7 @@ metadata:
   name: cleanup-address-pool-job
   namespace: argocd
   annotations:
+    argocd.argoproj.io/sync-wave: "15"
     argocd.argoproj.io/hook: PostDelete
     argocd.argoproj.io/hook-delete-policy: HookSucceeded
 spec:
