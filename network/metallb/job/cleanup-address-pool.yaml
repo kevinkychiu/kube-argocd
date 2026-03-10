@@ -23,6 +23,5 @@ spec:
               kubectl delete L2Advertisement -n metallb-system -l argocd-app=address-pool-job
               kubectl delete IPAddressPool -n metallb-system -l argocd-app=address-pool-job
               echo "Cleaning up resources..."
-              kubectl delete jon -n argocd address-pool-job
+              kubectl delete job -n argocd address-pool-job
               echo "Cleanup job completed."
-              sleep 120
