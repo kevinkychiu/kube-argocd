@@ -25,3 +25,4 @@ spec:
               echo "Cleaning up resources..."
               kubectl delete jon -n argocd address-pool-job
               echo "Cleanup job completed."
+              sleep 120
