@@ -15,22 +15,22 @@ spec:
         image: bitnami/kubectl:latest
         envFrom:
         - secretRef:
-            name: metallb-address-pools
+            name: metallb-system
         env:
         - name: PRIMARY_ADDRESS_POOL
           valueFrom:
             secretKeyRef:
-              name: metallb-address-pools
+              name: metallb-system
               key: primary-address-pool
         - name: SECONDARY_ADDRESS_POOL
           valueFrom:
             secretKeyRef:
-              name: metallb-address-pools
+              name: metallb-system
               key: secondary-address-pool
-        volumeMounts:
-        - name: metallb-address-pools
-          mountPath: /etc/config
-          readOnly: true
+        # volumeMounts:
+        # - name: metallb-system
+        #   mountPath: /etc/config
+        #   readOnly: true
         command:
         - "/bin/bash"
         - "-c"
@@ -82,9 +82,9 @@ spec:
           kubectl get IPAddressPool -A
           kubectl get L2Advertisement -A
           echo "Done."
-      volumes:
-      - name: metallb-address-pools
-        secret:
-          secretName: metallb-address-pools
+      # volumes:
+      # - name: metallb-system
+      #   secret:
+      #     secretName: metallb-system
       restartPolicy: Never # Job should terminate after completion
   backoffLimit: 4 # Optional: specify retry limits

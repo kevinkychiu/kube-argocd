@@ -61,7 +61,7 @@ spec:
   project: network
   info:
     - name: Helm Chart URL
-      value: https://traefik.github.io/charts
+      value: hhttps://artifacthub.io/packages/helm/traefik/traefik
     - name: Helm Chart values.yaml
       value: https://github.com/traefik/traefik-helm-chart/blob/master/traefik/values.yaml
   destination:
