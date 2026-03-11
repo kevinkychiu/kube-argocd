@@ -3,6 +3,8 @@ kind: AppProject
 metadata:
   name: network
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/tracking-id: argocd-projects:apps/AppProject:argocd/network
   labels:
     argocd-app: argocd-projects
 spec:
