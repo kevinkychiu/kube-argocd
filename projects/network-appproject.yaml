@@ -4,7 +4,7 @@ metadata:
   name: network
   namespace: argocd
   labels:
-    argocd-app: rke2-appset-projects-local
+    argocd-app: argocd-projects
 spec:
   description: Network projects
   sourceRepos:
