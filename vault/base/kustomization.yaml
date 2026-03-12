@@ -1,0 +1,5 @@
+commonLabels:
+  app: vault
+
+resources:
+- configMap.yaml
