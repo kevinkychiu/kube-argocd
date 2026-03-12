@@ -1,0 +1,77 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: vault-init
+  namespace: vault
+  annotations:
+    argocd.argoproj.io/sync-wave: "15"
+spec:
+  template:
+    spec:
+      containers:
+      - name: vault-init
+        # Use an image with kubectl pre-installed, e.g., bitnami/kubectl
+        image: hashicorp/vault:1.18.1
+        envFrom:
+        - configMapRef:
+            name: vault-config-map
+        volumeMounts:
+        - name: data
+          mountPath: "/vault/data"
+        command:
+        - "/bin/bash"
+        - "-c"
+        # The actual kubectl command to run
+        - |
+          UNSEAL_FILE=/vault/data/init.txt
+          STATUS_FILE=/tmp/status.txt
+
+          sleep 20
+
+          while true; do
+              vault status > $STATUS_FILE 2>/dev/null
+              RETVAL=$?
+              if [ $RETVAL -ne 1 ]; then
+                  if cat $STATUS_FILE | grep 'Initialized.*false'; then
+                      ARGS=""
+                      if cat $STATUS_FILE | grep 'Initialized.*false'; then
+                          echo "Initializing Vault..."
+                      else
+                          echo "Initializing Vault with 5 key shares and a 3 key threshold..."
+                          ARGS="-key-shares=5 -key-threshold=3"
+                      fi
+                      vault operator init $ARGS > $UNSEAL_FILE
+                      RETVAL=$?
+                      if [ $RETVAL -eq 0 ]; then
+                          break;
+                      fi
+                  else
+                      echo "Vault is already initialized."
+                      if [ ! -e "$UNSEAL_FILE" ]; then
+                          echo "$UNSEAL_FILE does not exist"
+                          exit 10
+                      fi
+                      break;
+                  fi
+              fi
+              echo "Waiting Vault status..."
+              sleep 5
+          done
+
+
+
+          echo "[$NAMESPACE] ===================="
+          echo "[$NAMESPACE] START - Vault secret"
+          echo "[$NAMESPACE] ===================="
+          awk -v n="$NAMESPACE"  '{print "["n"] " $0}' $UNSEAL_FILE
+          echo "[$NAMESPACE] ===================="
+          echo "[$NAMESPACE] END - Vault secret"
+          echo "[$NAMESPACE] ===================="
+
+          exit 0
+      volumes:
+      - name: data
+        emptyDir: {}
+      restartPolicy: OnFailure # Job should terminate after completion
+  backoffLimit: 10 # Optional: specify retry limits
+  activeDeadlineSeconds: 600 # Optional: specify a timeout for the job
