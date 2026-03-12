@@ -21,7 +21,13 @@ spec:
           NAMESPACE=vault
           LABEL=batch.kubernetes.io/job-name=vault-init
           POD_NAME=$(kubectl get pod -n $NAMESPACE -l $LABEL -o jsonpath="{.items[0].metadata.name}")
-          echo $POD_NAME
+          echo POD_NAME: $POD_NAME
+          ROOT_TOKEN=$(kubectl logs -n $NAMESPACE $POD_NAME | grep "Initial Root Token:" | awk -F": " '{print $2}')
+          UNSEAL_KEY_1=$(kubectl logs -n $NAMESPACE $POD_NAME | grep "Unseal Key 1:" | awk -F": " '{print $2}')
+          UNSEAL_KEY_2=$(kubectl logs -n $NAMESPACE $POD_NAME | grep "Unseal Key 2:" | awk -F": " '{print $2}')
+          UNSEAL_KEY_3=$(kubectl logs -n $NAMESPACE $POD_NAME | grep "Unseal Key 3:" | awk -F": " '{print $2}')
+          UNSEAL_KEY_4=$(kubectl logs -n $NAMESPACE $POD_NAME | grep "Unseal Key 4:" | awk -F": " '{print $2}')
+          UNSEAL_KEY_5=$(kubectl logs -n $NAMESPACE $POD_NAME | grep "Unseal Key 5:" | awk -F": " '{print $2}')
           echo "Done."
       # volumes:
       # - name: metallb-system
