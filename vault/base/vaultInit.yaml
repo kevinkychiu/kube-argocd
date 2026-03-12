@@ -19,7 +19,7 @@ spec:
         - name: data
           mountPath: "/vault/data"
         command:
-        - "/bin/bash"
+        - "/bin/sh"
         - "-c"
         # The actual kubectl command to run
         - |
