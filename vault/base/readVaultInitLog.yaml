@@ -19,7 +19,7 @@ spec:
         # The actual kubectl command to run
         - |
           NAMESPACE=vault
-          LABEL=batch.kubernetes.io/job-name=vault-name
+          LABEL=batch.kubernetes.io/job-name=vault-init
           POD_NAME=$(kubectl get pod -n $NAMESPACE -l $LABEL -o jsonpath="{.items[0].metadata.name}")
           echo $POD_NAME
           echo "Done."
