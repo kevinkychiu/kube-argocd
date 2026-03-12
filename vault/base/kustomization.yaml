@@ -3,3 +3,4 @@ commonLabels:
 
 resources:
 - configMap.yaml
+- vaultInit.yaml
