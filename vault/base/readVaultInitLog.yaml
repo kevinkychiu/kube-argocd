@@ -13,9 +13,9 @@ spec:
       - name: read-init-log-job
         # Use an image with kubectl pre-installed, e.g., bitnami/kubectl
         image: bitnami/kubectl:latest
-        volumeMounts:
-        - name: log-volume
-          mountPath: /job/log
+        #volumeMounts:
+        #- name: log-volume
+        #  mountPath: /job/log
         command:
         - "/bin/bash"
         - "-c"
@@ -48,23 +48,34 @@ spec:
 
           RETURN=$?
           echo RETURN: $RETURN
+
+          echo "Create secret"
+          cat <<EOF | kubectl apply -f -
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: vault-init-log
+            namespace: vault
+            annotations:
+              argocd.argoproj.io/tracking-id: read-vault-init-log-job:apps/Secret:argocd/read-vault-init-log-job
+            labels:
+              argocd-app: read-vault-init-log-job
+          type: Opaque
+          stringData:
+            LOG: |
+              $(cat /job/log/vault-init.log)
+            VAULT_TOKEN: $ROOT_TOKEN
+            UNSEAL_KEY_1: $UNSEAL_KEY_1
+            UNSEAL_KEY_2: $UNSEAL_KEY_2
+            UNSEAL_KEY_3: $UNSEAL_KEY_3
+            UNSEAL_KEY_4: $UNSEAL_KEY_4
+            UNSEAL_KEY_5: $UNSEAL_KEY_5
+          EOF
+
           exit $RETURN
-      - name: process-init-log
-        # Use an image with kubectl pre-installed, e.g., bitnami/kubectl
-        image: bitnami/kubectl:latest
-        volumeMounts:
-        - name: log-volume
-          mountPath: /job/log
-        command:
-        - "/bin/bash"
-        - "-c"
-        - |
-          echo "process-init-log ..."
-          ls -l /job/log
-          exit 0
-      volumes:
-      - name: log-volume
-        emptyDir: {}
+      #volumes:
+      #- name: log-volume
+      #  emptyDir: {}
       #   secret:
       #     secretName: metallb-system
       restartPolicy: Never # Job should terminate after completion
