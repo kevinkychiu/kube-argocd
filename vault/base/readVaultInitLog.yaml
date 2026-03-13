@@ -21,6 +21,7 @@ spec:
         - "-c"
         # The actual kubectl command to run
         - |
+          echo "read-init-log-job ..."
           NAMESPACE=vault
           LABEL=batch.kubernetes.io/job-name=vault-init
           POD_NAME=$(kubectl get pod -n $NAMESPACE -l $LABEL -o jsonpath="{.items[0].metadata.name}")
@@ -58,6 +59,7 @@ spec:
         - "/bin/bash"
         - "-c"
         - |
+          echo "process-init-log ..."
           ls -l /job/log
           exit 0
       volumes:
