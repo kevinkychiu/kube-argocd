@@ -17,7 +17,6 @@ spec:
       activeDeadlineSeconds: 600
       template:
         spec:
-          restartPolicy: Never
           containers:
           - name: vault-monitor
             image: hashicorp/vault:1.18.1
