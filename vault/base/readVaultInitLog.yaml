@@ -13,6 +13,9 @@ spec:
       - name: read-init-log-job
         # Use an image with kubectl pre-installed, e.g., bitnami/kubectl
         image: bitnami/kubectl:latest
+        volumeMounts:
+        - name: log-volume
+          mountPath: /job/log
         command:
         - "/bin/bash"
         - "-c"
@@ -36,9 +39,21 @@ spec:
             | jq --arg val "$UNSEAL_KEY_2" '. + {unseal_key_2: $val}' \
             | jq --arg val "$UNSEAL_KEY_3" '. + {unseal_key_3: $val}' \
             | jq --arg val "$UNSEAL_KEY_4" '. + {unseal_key_4: $val}' \
-            | jq --arg val "$UNSEAL_KEY_5" '. + {unseal_key_5: $val}'
-      # volumes:
-      # - name: metallb-system
+            | jq --arg val "$UNSEAL_KEY_5" '. + {unseal_key_5: $val}' > /job/log/vault-init.log
+      - name: process-init-log
+        # Use an image with kubectl pre-installed, e.g., bitnami/kubectl
+        image: bitnami/kubectl:latest
+        volumeMounts:
+        - name: log-volume
+          mountPath: /job/log
+        command:
+        - "/bin/bash"
+        - "-c"
+        - |
+          cat /job/log/vault-init.log
+      volumes:
+      - name: log-volume
+        emptyDir: {}
       #   secret:
       #     secretName: metallb-system
       restartPolicy: Never # Job should terminate after completion
