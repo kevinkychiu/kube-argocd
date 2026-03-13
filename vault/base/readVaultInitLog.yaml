@@ -58,7 +58,8 @@ spec:
         - "/bin/bash"
         - "-c"
         - |
-          cat /job/log/vault-init.log
+          ls -l /job/log
+          exit 0
       volumes:
       - name: log-volume
         emptyDir: {}
