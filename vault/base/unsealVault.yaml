@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: unseal-vault-job-test
+  name: unseal-vault-job
   namespace: vault
   annotations:
     argocd.argoproj.io/sync-wave: "25"
