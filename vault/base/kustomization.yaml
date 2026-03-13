@@ -1,8 +1,8 @@
-commonLabels:
+labels:
   app: vault
 
 resources:
 - configMap.yaml
 - vaultInit.yaml
 - readVaultInitLog.yaml
-- unsealVault
+- unsealVault.yaml
