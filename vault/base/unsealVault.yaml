@@ -57,7 +57,9 @@ spec:
                       while true; do
                           vault status 1>/dev/mill
                           RETVAL=$?
+                          echo RETVAL: $RETVAL
                           if [ $RETVAL -eq 0 ]; then
+                              echo "Vault is already unsealed."
                               return 0;
                           elif [ $RETVAL -eq 2 ]; then
                               vault operator unseal $KEY # 1>/dev/mill
