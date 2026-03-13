@@ -44,7 +44,7 @@ spec:
             | jq --arg val "$UNSEAL_KEY_2" '. + {unseal_key_2: $val}' \
             | jq --arg val "$UNSEAL_KEY_3" '. + {unseal_key_3: $val}' \
             | jq --arg val "$UNSEAL_KEY_4" '. + {unseal_key_4: $val}' \
-            | jq --arg val "$UNSEAL_KEY_5" '. + {unseal_key_5: $val}' > /job/log/vault-init.log
+            | jq --arg val "$UNSEAL_KEY_5" '. + {unseal_key_5: $val}' > /tmp/vault-init.log
 
           RETURN=$?
           echo RETURN: $RETURN
@@ -63,7 +63,7 @@ spec:
           type: Opaque
           stringData:
             LOG: |
-              $(cat /job/log/vault-init.log)
+              $(cat /tmp/vault-init.log)
             VAULT_TOKEN: $ROOT_TOKEN
             UNSEAL_KEY_1: $UNSEAL_KEY_1
             UNSEAL_KEY_2: $UNSEAL_KEY_2
