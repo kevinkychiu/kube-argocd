@@ -77,6 +77,11 @@ spec:
                   POD_NAME=vault-$i
                   echo " "
                   echo "====> Unseal $POD_NAME"
+                  export VAULT_ADDR="http://$POD_NAME.vault-internal:8200"
+                  if [ $i -ne 0 ]; then
+                      join_raft_node
+                  fi
+                  unseal_node
               done
 
           restartPolicy: Never
