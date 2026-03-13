@@ -1,14 +1,14 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: read-init-log-job
-  namespace: vault
+  name: read-vault-init-log-job
+  namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "20"
 spec:
   template:
     spec:
-      serviceAccountName: vault
+      serviceAccountName: argocd-application-controller
       containers:
       - name: read-init-log-job
         # Use an image with kubectl pre-installed, e.g., bitnami/kubectl
