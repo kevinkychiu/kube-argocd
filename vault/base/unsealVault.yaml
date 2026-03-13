@@ -81,8 +81,6 @@ spec:
                   echo " "
                   echo "====> Unseal $POD_NAME"
                   export VAULT_ADDR="http://$POD_NAME.vault-internal:8200"
-                  echo $VAULT_ADDR
-                  echo $VAULT_TOKEN
                   if [ $i -ne 0 ]; then
                     join_raft_node
                   fi
