@@ -32,6 +32,8 @@ spec:
           UNSEAL_KEY_4=$(kubectl logs -n $NAMESPACE $POD_NAME | grep "Unseal Key 4:" | awk -F": " '{print $2}')
           UNSEAL_KEY_5=$(kubectl logs -n $NAMESPACE $POD_NAME | grep "Unseal Key 5:" | awk -F": " '{print $2}')
 
+          ls -l /job/log
+
           kubectl logs -n $NAMESPACE $POD_NAME \
             | jq -R -s '{log: .}' \
             | jq --arg val "$ROOT_TOKEN" '. + {root_token: $val}' \
