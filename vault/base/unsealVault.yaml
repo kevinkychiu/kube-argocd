@@ -36,6 +36,7 @@ spec:
               join_raft_node() {
                   # Join Raft Node
                   echo "Join Raft Node $VAULT_ADDR..."
+                  echo MASTER_VAULT_ADDR: $MASTER_VAULT_ADDR
                   while true; do
                       vault operator raft join $MASTER_VAULT_ADDR
                       retval=$?
@@ -80,6 +81,10 @@ spec:
                   export VAULT_ADDR="http://$POD_NAME.vault-internal:8200"
                   echo $VAULT_ADDR
                   echo $VAULT_TOKEN
+                  if [ $i -ne 0 ]; then
+                    join_raft_node
+                  fi
+                  unseal_node
               done
 
           restartPolicy: Never
