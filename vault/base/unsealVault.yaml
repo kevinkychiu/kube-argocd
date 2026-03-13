@@ -79,6 +79,7 @@ spec:
                   echo "====> Unseal $POD_NAME"
                   export VAULT_ADDR="http://$POD_NAME.vault-internal:8200"
                   echo $VAULT_ADDR
+                  echo $VAULT_TOKEN
               done
 
           restartPolicy: Never
