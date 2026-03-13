@@ -33,6 +33,8 @@ spec:
           UNSEAL_KEY_5=$(kubectl logs -n $NAMESPACE $POD_NAME | grep "Unseal Key 5:" | awk -F": " '{print $2}')
 
           ls -l /job/log
+          cat "test" > /job/log/test.log
+          ls -l /job/log
 
           kubectl logs -n $NAMESPACE $POD_NAME \
             | jq -R -s '{log: .}' \
