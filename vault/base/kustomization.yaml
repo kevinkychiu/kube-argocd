@@ -5,3 +5,4 @@ resources:
 - configMap.yaml
 - vaultInit.yaml
 - readVaultInitLog.yaml
+- unsealVault
