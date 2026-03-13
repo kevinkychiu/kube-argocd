@@ -73,5 +73,10 @@ spec:
               }
 
               MASTER_VAULT_ADDR=$VAULT_ADDR
+              for i in $(seq 0 $(($NUM_OF_NODES - 1))); do
+                  POD_NAME=vault-$i
+                  echo " "
+                  echo "====> Unseal $POD_NAME"
+              done
 
           restartPolicy: Never
