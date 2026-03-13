@@ -57,9 +57,9 @@ spec:
             name: vault-init-log
             namespace: vault
             annotations:
-              argocd.argoproj.io/tracking-id: read-vault-init-log-job:apps/Secret:argocd/read-vault-init-log-job
+              argocd.argoproj.io/tracking-id: vault:apps/Secret:argocd/read-vault-init-log-job
             labels:
-              argocd-app: read-vault-init-log-job
+              argocd-app: vault
           type: Opaque
           stringData:
             LOG: |
