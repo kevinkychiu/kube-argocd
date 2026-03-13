@@ -23,6 +23,7 @@ spec:
           POD_NAME=$(kubectl get pod -n $NAMESPACE -l $LABEL -o jsonpath="{.items[0].metadata.name}")
           echo POD_NAME: $POD_NAME
           ROOT_TOKEN=$(kubectl logs -n $NAMESPACE $POD_NAME | grep "Initial Root Token:" | awk -F": " '{print $2}')
+          echo ROOT_TOKEN: $ROOT_TOKEN
           echo "Done."
       # volumes:
       # - name: metallb-system
