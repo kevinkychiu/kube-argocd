@@ -23,8 +23,20 @@ spec:
           POD_NAME=$(kubectl get pod -n $NAMESPACE -l $LABEL -o jsonpath="{.items[0].metadata.name}")
           echo POD_NAME: $POD_NAME
           ROOT_TOKEN=$(kubectl logs -n $NAMESPACE $POD_NAME | grep "Initial Root Token:" | awk -F": " '{print $2}')
-          echo ROOT_TOKEN: $ROOT_TOKEN
-          echo "Done."
+          UNSEAL_KEY_1=$(kubectl logs -n $NAMESPACE $POD_NAME | grep "Unseal Key 1:" | awk -F": " '{print $2}')
+          UNSEAL_KEY_2=$(kubectl logs -n $NAMESPACE $POD_NAME | grep "Unseal Key 2:" | awk -F": " '{print $2}')
+          UNSEAL_KEY_3=$(kubectl logs -n $NAMESPACE $POD_NAME | grep "Unseal Key 3:" | awk -F": " '{print $2}')
+          UNSEAL_KEY_4=$(kubectl logs -n $NAMESPACE $POD_NAME | grep "Unseal Key 4:" | awk -F": " '{print $2}')
+          UNSEAL_KEY_5=$(kubectl logs -n $NAMESPACE $POD_NAME | grep "Unseal Key 5:" | awk -F": " '{print $2}')
+
+          kubectl logs -n $NAMESPACE $POD_NAME \
+            | jq -R -s '{log: .}' \
+            | jq --arg val "$ROOT_TOKEN" '. + {root_token: $val}' \
+            | jq --arg val "$UNSEAL_KEY_1" '. + {unseal_key_1: $val}' \
+            | jq --arg val "$UNSEAL_KEY_2" '. + {unseal_key_2: $val}' \
+            | jq --arg val "$UNSEAL_KEY_3" '. + {unseal_key_3: $val}' \
+            | jq --arg val "$UNSEAL_KEY_4" '. + {unseal_key_4: $val}' \
+            | jq --arg val "$UNSEAL_KEY_5" '. + {unseal_key_5: $val}'
       # volumes:
       # - name: metallb-system
       #   secret:
