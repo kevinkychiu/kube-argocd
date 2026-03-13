@@ -1,37 +1,36 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: unseal-vault-job
+  name: unseal-vault-job-test
   namespace: vault
   annotations:
     argocd.argoproj.io/sync-wave: "25"
 spec:
-  concurrencyPolicy: Forbid
-  failedJobsHistoryLimit: 5
   schedule: "*/5 * * * *"
+  concurrencyPolicy: Forbid
   startingDeadlineSeconds: 10
   successfulJobsHistoryLimit: 10
+  failedJobsHistoryLimit: 5
   jobTemplate:
     spec:
-      activeDeadlineSeconds: 600
       backoffLimit: 10
+      activeDeadlineSeconds: 600
       template:
         spec:
-          container:
-            - name: "vault-monitor"
-              image: hashicorp/vault:1.18.1
-              envFrom:
-              - configMapRef:
-                  name: vault-config-map
-              - secretRef:
-                  name: vault-init-log
-              command:
-              - "/bin/sh"
-              - "-c"
-              # The actual kubectl command to run
-              - |
-                echo "vault-monitor ..."
-                KEYS="$UNSEAL_KEY_1 $UNSEAL_KEY_2 $UNSEAL_KEY_3 $UNSEAL_KEY_4 $UNSEAL_KEY_5"
-                echo $KEYS
-
+          restartPolicy: Never
+          containers:
+          - name: vault-monitor
+            image: hashicorp/vault:1.18.1
+            envFrom:
+            - configMapRef:
+                name: vault-config-map
+            - secretRef:
+                name: vault-init-log
+            command:
+            - /bin/sh
+            - -c
+            - |
+              echo "vault-monitor ..."
+              KEYS="$UNSEAL_KEY_1 $UNSEAL_KEY_2 $UNSEAL_KEY_3 $UNSEAL_KEY_4 $UNSEAL_KEY_5"
+              echo $KEYS
           restartPolicy: Never
