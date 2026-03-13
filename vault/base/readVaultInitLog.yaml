@@ -57,15 +57,15 @@ spec:
             labels:
               argocd-app: vault
           type: Opaque
-          stringData:
+          data:
             LOG: |
-              $(cat /tmp/vault-init.log)
-            VAULT_TOKEN: $ROOT_TOKEN
-            UNSEAL_KEY_1: $UNSEAL_KEY_1
-            UNSEAL_KEY_2: $UNSEAL_KEY_2
-            UNSEAL_KEY_3: $UNSEAL_KEY_3
-            UNSEAL_KEY_4: $UNSEAL_KEY_4
-            UNSEAL_KEY_5: $UNSEAL_KEY_5
+              $(cat /tmp/vault-init.log | base64 -w 0)
+            VAULT_TOKEN: $(echo $ROOT_TOKEN | base64 -w 0)
+            UNSEAL_KEY_1: $(echo $UNSEAL_KEY_1 | base64 -w 0)
+            UNSEAL_KEY_2: $(echo $UNSEAL_KEY_2 | base64 -w 0)
+            UNSEAL_KEY_3: $(echo $UNSEAL_KEY_3 | base64 -w 0)
+            UNSEAL_KEY_4: $(echo $UNSEAL_KEY_4 | base64 -w 0)
+            UNSEAL_KEY_5: $(echo $UNSEAL_KEY_5 | base64 -w 0)
           EOF
 
           exit $RETURN
