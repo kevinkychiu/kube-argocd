@@ -7,3 +7,4 @@ data:
   NAMESPACE: vault
   VAULT_ADDR: http://vault-0.vault-internal:8200
   VAULT_SKIP_VERIFY: "true"
+  NUM_OF_NODES: 3
