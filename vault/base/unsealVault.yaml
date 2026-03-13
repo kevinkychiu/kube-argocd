@@ -18,20 +18,20 @@ spec:
       template:
         spec:
           container:
-            name: "vault-monitor"
-            image: hashicorp/vault:1.18.1
-            envFrom:
-            - configMapRef:
-                name: vault-config-map
-            - secretRef:
-                name: vault-init-log
-            command:
-            - "/bin/sh"
-            - "-c"
-            # The actual kubectl command to run
-            - |
-              echo "vault-monitor ..."
-              KEYS="$UNSEAL_KEY_1 $UNSEAL_KEY_2 $UNSEAL_KEY_3 $UNSEAL_KEY_4 $UNSEAL_KEY_5"
-              echo $KEYS
+            - name: "vault-monitor"
+              image: hashicorp/vault:1.18.1
+              envFrom:
+              - configMapRef:
+                  name: vault-config-map
+              - secretRef:
+                  name: vault-init-log
+              command:
+              - "/bin/sh"
+              - "-c"
+              # The actual kubectl command to run
+              - |
+                echo "vault-monitor ..."
+                KEYS="$UNSEAL_KEY_1 $UNSEAL_KEY_2 $UNSEAL_KEY_3 $UNSEAL_KEY_4 $UNSEAL_KEY_5"
+                echo $KEYS
 
           restartPolicy: Never
