@@ -60,12 +60,12 @@ spec:
           data:
             LOG: |
               $(cat /tmp/vault-init.log | base64 -w 0)
-            VAULT_TOKEN: $(echo $ROOT_TOKEN | base64 -w 0)
-            UNSEAL_KEY_1: $(echo $UNSEAL_KEY_1 | base64 -w 0)
-            UNSEAL_KEY_2: $(echo $UNSEAL_KEY_2 | base64 -w 0)
-            UNSEAL_KEY_3: $(echo $UNSEAL_KEY_3 | base64 -w 0)
-            UNSEAL_KEY_4: $(echo $UNSEAL_KEY_4 | base64 -w 0)
-            UNSEAL_KEY_5: $(echo $UNSEAL_KEY_5 | base64 -w 0)
+            VAULT_TOKEN: $(echo -n $ROOT_TOKEN | base64 -w 0)
+            UNSEAL_KEY_1: $(echo -n $UNSEAL_KEY_1 | base64 -w 0)
+            UNSEAL_KEY_2: $(echo -n $UNSEAL_KEY_2 | base64 -w 0)
+            UNSEAL_KEY_3: $(echo -n $UNSEAL_KEY_3 | base64 -w 0)
+            UNSEAL_KEY_4: $(echo -n $UNSEAL_KEY_4 | base64 -w 0)
+            UNSEAL_KEY_5: $(echo -n$UNSEAL_KEY_5 | base64 -w 0)
           EOF
 
           exit $RETURN
