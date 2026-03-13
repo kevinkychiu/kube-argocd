@@ -33,7 +33,7 @@ spec:
           UNSEAL_KEY_5=$(kubectl logs -n $NAMESPACE $POD_NAME | grep "Unseal Key 5:" | awk -F": " '{print $2}')
 
           ls -l /job/log
-          cat "test" > /job/log/test.log
+          echo "test" > /job/log/test.log
           ls -l /job/log
 
           kubectl logs -n $NAMESPACE $POD_NAME \
@@ -44,6 +44,10 @@ spec:
             | jq --arg val "$UNSEAL_KEY_3" '. + {unseal_key_3: $val}' \
             | jq --arg val "$UNSEAL_KEY_4" '. + {unseal_key_4: $val}' \
             | jq --arg val "$UNSEAL_KEY_5" '. + {unseal_key_5: $val}' > /job/log/vault-init.log
+
+          RETURN=$?
+          echo RETURN: $RETURN
+          exit $RETURN
       - name: process-init-log
         # Use an image with kubectl pre-installed, e.g., bitnami/kubectl
         image: bitnami/kubectl:latest
@@ -61,4 +65,4 @@ spec:
       #   secret:
       #     secretName: metallb-system
       restartPolicy: Never # Job should terminate after completion
-  backoffLimit: 4 # Optional: specify retry limits
+  backoffLimit: 3 # Optional: specify retry limits
